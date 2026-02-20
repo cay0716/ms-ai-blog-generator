@@ -5,6 +5,7 @@ import Hero from '@/components/Hero';
 import GenerateForm from '@/components/generateForm/GenerateForm';
 import { type GeneratedContent, GenerateFormState} from '@/types/generate';
 import ResultViewer from '@/components/ResultViewer';
+import Header from '@/components/layout/Header';
 
 
 export default function Page() {
@@ -50,12 +51,15 @@ export default function Page() {
   };
 
   return (
-    <main className="flex flex-col items-center py-7">
-      <div className="w-full px-8 max-w-3xl">
-        <Hero />
-        <GenerateForm form={form} setForm={setForm} loading={loading} onSubmit={handleSubmit} />
-        {result && <ResultViewer key={`${result.title}-${form.style}-${form.tone}`} result={result} />}
-      </div>
-    </main>
+    <>
+      <Header />
+      <main className="flex flex-col items-center">
+        <div className="w-full px-8 max-w-3xl">
+          <Hero />
+          <GenerateForm form={form} setForm={setForm} loading={loading} onSubmit={handleSubmit} />
+          {result && <ResultViewer key={`${result.title}-${form.style}-${form.tone}`} result={result} />}
+        </div>
+      </main>
+    </>
   );
 }
