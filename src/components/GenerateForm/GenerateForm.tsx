@@ -8,10 +8,12 @@ interface Props {
   form: GenerateFormState;
   setForm: React.Dispatch<React.SetStateAction<GenerateFormState>>;
   loading: boolean;
+  error: string | null;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  onRetry: () => void;
 }
 
-export default function GenerateForm({ form, setForm, loading, onSubmit, }: Props) {
+export default function GenerateForm({ form, setForm, loading, error, onSubmit, onRetry, }: Props) {
   return(
     <>
       <form action="" onSubmit={onSubmit} className=''>
@@ -28,6 +30,18 @@ export default function GenerateForm({ form, setForm, loading, onSubmit, }: Prop
           글 생성
         </button>
       </form>
+      {error && (
+        <div className="mt-4 p-4 bg-red-100 text-red-600 rounded">
+          <p>{error}</p>
+
+          <button
+            onClick={onRetry}
+            className="mt-2 px-4 py-1 bg-red-500 text-white rounded"
+          >
+            다시 시도
+          </button>
+        </div>
+      )}
       <div>
         {loading && <ResultLoading />}
       </div>
