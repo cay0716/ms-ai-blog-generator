@@ -9,7 +9,7 @@ export default function Header() {
         <li>
             <Link href="/">
               <Image
-                src="/img/logo.svg"
+                src="/icon.svg"
                 alt="로고"
                 width={35}
                 height={35}

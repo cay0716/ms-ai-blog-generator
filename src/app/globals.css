@@ -163,3 +163,12 @@
     animation-delay: 0.4s;
   }
 }
+
+.toastui-editor-contents pre {
+  background-color: #272727 !important;
+  color: white;
+}
+
+.toastui-editor-contents pre code {
+  background: transparent !important;
+}
