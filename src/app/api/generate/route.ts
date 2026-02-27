@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
       `;
 
     const completion = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
+      model: 'gpt-4o-mini',
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: userPrompt },
@@ -64,19 +64,34 @@ function getSystemPrompt(style: string, tone: string): string {
     모든 문장은 반드시 "~해요", "~입니다"로 끝나야 합니다.
     다른 종결어미(~다, ~함, ~이다 등)를 사용하면 안 됩니다.
     설명하듯 친절한 선생님 말투로 작성하세요.
+
+    출력 문장에서 위 말투 규칙을 단 하나라도 어길 경우
+    응답은 실패로 간주됩니다.
+    다른 종결어미가 한 문장이라도 포함되면 안 돼요.
+    예외 없습니다.
     `,
 
     minimal: `
     모든 문장은 반드시 명사형 또는 "~함", "~임"으로 끝나야 함.
-    "~요", "~습니다", "~해요"와 같은 설명형 종결어미 사용 금지.
+    설명하는 글에서도 무조건 '~함', '~임'으로 끝나게 작성해야 함.
     설명하듯 말하지 말고, 문서 요약하듯 작성함.
-    튜토리얼 형식이어도 말투는 변하지 않음.
+    개요, 마무리가 있을 경우에도 무조건 '~함', '~임'으로 끝나게 작성해야 함.
+
+    출력 문장에서 위 말투 규칙을 단 하나라도 어길 경우
+    응답은 실패로 간주됨.
+    다른 종결어미가 한 문장이라도 포함되면 안 됨.
+    예외 없음.
     `,
 
     formal: `
     모든 문장은 반드시 과거형 서술체로 작성하세요.
     문장 끝은 "~했다", "~이다"로 통일합니다.
     회고록 또는 개발 일지 형식의 말투를 사용하세요.
+
+    출력 문장에서 위 말투 규칙을 단 하나라도 어길 경우
+    응답은 실패로 간주된다.
+    다른 종결어미가 한 문장이라도 포함되면 안 된다.
+    예외 없다.
     `
   };
 
@@ -149,7 +164,7 @@ function getSystemPrompt(style: string, tone: string): string {
   const selectedStyle = styleGuides[style] || styleGuides.tutorial;
   const selectedTone = toneGuides[tone] || toneGuides.kind;
 
-    const basePrompt = `당신은 기술 블로그 전문 작가입니다.
+  const basePrompt = `당신은 기술 블로그 전문 작가입니다.
     사용자가 제공한 주제와 키워드를 바탕으로 기술 블로그 글을 작성합니다.
     
     반드시 JSON 형식으로만 응답해야 됩니다.
@@ -176,7 +191,15 @@ function getSystemPrompt(style: string, tone: string): string {
       "content": "마크다운 형식의 본문",
       "hashtags": ["태그1", "태그2", "태그3"],
       "metaDescription": "SEO 메타 설명 (160자 이내)"
-    }`;
+    }
+    
+    [최종 검증 규칙]
+
+    1. 응답을 생성하기 전에 문장 종결어미를 자체 검토하세요.
+    2. 선택된 말투 규칙과 다른 종결어미가 포함되어 있으면 반드시 수정하세요.
+    3. 말투 규칙 위반은 절대 허용되지 않습니다.
+    4. 글 형식보다 말투 규칙이 항상 우선합니다.
+    `;
   
   return basePrompt;
 }
