@@ -154,6 +154,10 @@
     background-color: #111;
     animation: dotPulse 1.4s infinite ease-in-out both;
   }
+  
+  .dark .loading-dot {
+    background-color: #fff;
+  }
 
   .loading-dot.delay-100 {
     animation-delay: 0.2s;
